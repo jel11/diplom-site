@@ -1,0 +1,861 @@
+/* ================================================================
+   style.css — стили сайта МакраМир
+   Структура файла:
+   1. CSS-переменные (цвета, тени, шрифты)
+   2. Сброс стилей
+   3. Анимации
+   4. Шапка (навигация)
+   5. Мобильное меню
+   6. Поиск
+   7. Корзина
+   8. Главный экран (hero)
+   9. Секция преимуществ
+   10. Каталог товаров
+   11. Быстрый просмотр товара
+   12. О нас
+   13. Галерея
+   14. Промо-баннер
+   15. Доставка
+   16. Контакты + форма + карта
+   17. Всплывающее уведомление (toast)
+   18. Подвал (footer)
+   19. Адаптивность (медиазапросы)
+================================================================ */
+
+
+/* ----------------------------------------------------------------
+   1. CSS-ПЕРЕМЕННЫЕ
+   Изменяя значения здесь — меняешь дизайн сразу везде.
+---------------------------------------------------------------- */
+:root {
+  /* Цвета */
+  --c-primary:   #5C3524;   /* основной тёмно-коричневый */
+  --c-primary-l: #7B4F3B;   /* чуть светлее, для hover */
+  --c-accent:    #C68B2A;   /* золотисто-янтарный акцент */
+  --c-accent-l:  #E0A83C;   /* светлее, для hover кнопки */
+  --c-bg:        #FAF8F4;   /* фон страницы (тёплый белый) */
+  --c-bg-alt:    #F2ECE4;   /* альтернативный фон секций */
+  --c-text:      #2B1A10;   /* основной цвет текста */
+  --c-muted:     #7A6650;   /* приглушённый текст */
+  --c-border:    #E0D3C6;   /* цвет границ и разделителей */
+  --c-white:     #FFFFFF;
+
+  /* Шрифты */
+  --f-display: 'Cormorant Garamond', serif; /* для заголовков */
+  --f-body:    'Inter', sans-serif;         /* для основного текста */
+
+  /* Тени */
+  --shadow-s: 0 2px 8px rgba(44, 26, 16, .08);
+  --shadow-m: 0 8px 28px rgba(44, 26, 16, .13);
+  --shadow-l: 0 24px 64px rgba(44, 26, 16, .18);
+
+  /* Общие параметры */
+  --t: all .3s cubic-bezier(.4, 0, .2, 1); /* плавный переход */
+  --r: 14px;                                /* скругление углов */
+}
+
+
+/* ----------------------------------------------------------------
+   2. СБРОС СТИЛЕЙ
+   Убираем стандартные отступы и поля браузера.
+---------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--f-body);
+  background: var(--c-bg);
+  color: var(--c-text);
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+ul { list-style: none; }
+
+/* Стилизация полосы прокрутки */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--c-bg-alt); }
+::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c-muted); }
+
+
+/* ----------------------------------------------------------------
+   3. АНИМАЦИИ
+   @keyframes — описывают как именно происходит анимация.
+   Классы .anim и .anim.on — для анимаций при прокрутке (через JS).
+---------------------------------------------------------------- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scrollDn {
+  0%   { top: -100%; }
+  100% { top: 100%; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes badge-pop {
+  0%   { transform: scale(0); }
+  80%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Элементы скрыты по умолчанию, класс .on добавляется через JS */
+.anim { opacity: 0; transform: translateY(32px); transition: opacity .7s ease, transform .7s ease; }
+.anim.on { opacity: 1; transform: translateY(0); }
+.anim-d1 { transition-delay: .1s; }
+.anim-d2 { transition-delay: .2s; }
+.anim-d3 { transition-delay: .3s; }
+.anim-d4 { transition-delay: .4s; }
+
+
+/* ----------------------------------------------------------------
+   4. ШАПКА (НАВИГАЦИЯ)
+   position:fixed — меню всегда поверх контента.
+   При скролле JS добавляет класс .solid — появляется фон.
+---------------------------------------------------------------- */
+#nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 0 48px;
+  transition: var(--t);
+}
+#nav.solid {
+  background: rgba(250, 248, 244, .95);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-s);
+}
+.nav-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.logo {
+  font-family: var(--f-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--c-white);
+  transition: color .3s;
+}
+#nav.solid .logo { color: var(--c-primary); }
+.logo em { color: var(--c-accent); font-style: normal; }
+
+.nav-links { display: flex; gap: 36px; }
+.nav-links a {
+  font-size: .82rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .85);
+  position: relative;
+  padding-bottom: 3px;
+  transition: color .3s;
+}
+#nav.solid .nav-links a { color: var(--c-text); }
+
+/* Подчёркивание при наведении — анимация через transform */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .35s ease;
+}
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.nav-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255, 255, 255, .9);
+  font-size: 1.05rem;
+  transition: var(--t);
+}
+#nav.solid .nav-icon { color: var(--c-text); }
+.nav-icon:hover { background: var(--c-bg-alt); color: var(--c-primary) !important; }
+
+/* Счётчик товаров в корзине */
+.cart-wrap { position: relative; }
+.cart-dot {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: .6rem; font-weight: 700;
+  display: none;
+  align-items: center; justify-content: center;
+}
+.cart-dot.show { display: flex; animation: badge-pop .3s ease; }
+
+/* Кнопка-гамбургер (три полоски) — только на мобильных */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  z-index: 10;
+}
+.burger span {
+  display: block;
+  width: 22px; height: 2px;
+  background: rgba(255, 255, 255, .9);
+  transition: var(--t);
+  border-radius: 2px;
+}
+#nav.solid .burger span { background: var(--c-text); }
+/* Анимация в крестик при открытии */
+.burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+
+/* ----------------------------------------------------------------
+   5. МОБИЛЬНОЕ МЕНЮ
+   Выезжает слева при нажатии на гамбургер.
+---------------------------------------------------------------- */
+#mob-menu {
+  position: fixed; inset: 0;
+  z-index: 800;
+  background: var(--c-bg);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 40px;
+  transform: translateX(-100%);
+  transition: transform .45s cubic-bezier(.77, 0, .175, 1);
+}
+#mob-menu.open { transform: translateX(0); }
+#mob-menu a {
+  font-family: var(--f-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 300;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--c-border);
+  display: block;
+  transition: color .3s;
+}
+#mob-menu a:hover { color: var(--c-accent); }
+
+
+/* ----------------------------------------------------------------
+   6. ПОИСК
+   Поверх всей страницы. opacity:0 + pointer-events:none = скрыт.
+   Класс .open делает его видимым и кликабельным.
+---------------------------------------------------------------- */
+#search-ov {
+  position: fixed; inset: 0;
+  z-index: 1100;
+  background: rgba(250, 248, 244, .98);
+  backdrop-filter: blur(24px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s;
+}
+#search-ov.open { opacity: 1; pointer-events: all; }
+
+.srch-box { width: min(720px, 92vw); }
+.srch-box h4 {
+  font-family: var(--f-display);
+  font-size: 1rem; font-weight: 300;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--c-muted);
+  margin-bottom: 28px; text-align: center;
+}
+.srch-row {
+  display: flex; align-items: center;
+  border-bottom: 2px solid var(--c-border);
+  padding-bottom: 4px;
+  transition: border-color .3s;
+}
+.srch-row:focus-within { border-color: var(--c-primary); }
+.srch-row input {
+  flex: 1; padding: 16px 12px;
+  font-family: var(--f-display); font-size: 1.6rem;
+  border: none; background: transparent;
+  color: var(--c-text); outline: none;
+}
+.srch-row svg { flex-shrink: 0; opacity: .4; }
+.srch-close-btn {
+  position: fixed; top: 28px; right: 36px;
+  font-size: 1.6rem; color: var(--c-muted);
+  transition: color .3s; background: none; border: none; cursor: pointer;
+}
+.srch-close-btn:hover { color: var(--c-primary); }
+
+#srch-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px; margin-top: 36px;
+}
+.srch-card {
+  background: white; border-radius: 10px;
+  overflow: hidden; cursor: pointer;
+  box-shadow: var(--shadow-s);
+  transition: var(--t);
+}
+.srch-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-m); }
+.srch-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.srch-card-body { padding: 10px 12px; }
+.srch-card-name { font-size: .8rem; font-weight: 500; margin-bottom: 3px; line-height: 1.3; }
+.srch-card-price { font-size: .78rem; color: var(--c-accent); font-weight: 600; }
+.srch-empty { text-align: center; color: var(--c-muted); padding: 32px 0; font-size: 1.05rem; }
+
+
+/* ----------------------------------------------------------------
+   7. КОРЗИНА (боковая панель)
+   Выезжает справа. Логика открытия/закрытия — в main.js.
+---------------------------------------------------------------- */
+#cart-veil {
+  position: fixed; inset: 0;
+  z-index: 1050;
+  background: rgba(0, 0, 0, .45);
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s;
+}
+#cart-veil.open { opacity: 1; pointer-events: all; }
+
+#cart {
+  position: fixed; right: 0; top: 0; bottom: 0;
+  width: min(460px, 100vw);
+  z-index: 1100;
+  background: var(--c-white);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .42s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: var(--shadow-l);
+}
+#cart.open { transform: translateX(0); }
+
+.cart-hd {
+  padding: 28px 32px;
+  border-bottom: 1px solid var(--c-border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.cart-hd h3 { font-size: 1.4rem; }
+.cart-x { font-size: 1.4rem; color: var(--c-muted); transition: color .3s; }
+.cart-x:hover { color: var(--c-primary); }
+
+.cart-body { flex: 1; overflow-y: auto; padding: 20px 32px; }
+.cart-empty-msg { text-align: center; padding: 70px 20px; color: var(--c-muted); }
+.cart-empty-msg svg { margin: 0 auto 20px; }
+.cart-empty-msg p { font-family: var(--f-display); font-size: 1.15rem; }
+
+.c-item {
+  display: flex; gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--c-border);
+  align-items: flex-start;
+}
+.c-item-img { width: 76px; height: 76px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.c-item-info { flex: 1; min-width: 0; }
+.c-item-name { font-size: .88rem; font-weight: 500; line-height: 1.35; margin-bottom: 4px; }
+.c-item-price { font-size: .82rem; color: var(--c-muted); }
+.c-item-qty { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.q-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--c-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: var(--t);
+}
+.q-btn:hover { background: var(--c-bg-alt); border-color: var(--c-primary); }
+.q-val { font-size: .88rem; font-weight: 600; min-width: 20px; text-align: center; }
+.c-item-del { color: var(--c-muted); font-size: 1.1rem; flex-shrink: 0; transition: color .3s; align-self: flex-start; }
+.c-item-del:hover { color: #e53e3e; }
+
+.cart-ft { padding: 20px 32px; border-top: 1px solid var(--c-border); }
+.cart-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 18px;
+}
+.cart-total-row span { font-family: var(--f-display); font-size: 1.1rem; }
+.cart-total-row strong { font-size: 1.5rem; color: var(--c-primary); }
+.btn-order {
+  width: 100%; padding: 17px;
+  background: var(--c-primary); color: white;
+  border-radius: 50px; font-size: .88rem;
+  font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  transition: var(--t);
+}
+.btn-order:hover { background: var(--c-primary-l); transform: translateY(-2px); box-shadow: var(--shadow-m); }
+
+
+/* ----------------------------------------------------------------
+   8. ГЛАВНЫЙ ЭКРАН (HERO)
+   100vh = высота окна браузера. Фото масштабируется при загрузке.
+---------------------------------------------------------------- */
+#hero {
+  position: relative;
+  height: 100vh; min-height: 620px;
+  overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  /* Градиент как запасной вариант, если фото не загрузится */
+  background: linear-gradient(135deg, #3D2317 0%, #6B4228 60%, #C68B2A 100%);
+  background-image: url('../image/6N4A9030.jpg');
+  background-size: cover; background-position: center;
+  transform: scale(1.06);
+  transition: transform 10s ease;
+}
+/* При загрузке страницы JS добавляет класс .go — фото плавно масштабируется */
+#hero.go .hero-bg { transform: scale(1); }
+
+.hero-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top,
+    rgba(20, 10, 5, .75) 0%,
+    rgba(20, 10, 5, .35) 40%,
+    rgba(20, 10, 5, .1)  100%
+  );
+}
+.hero-content {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 1440px; margin: 0 auto;
+  padding: 0 48px 96px;
+}
+.hero-content h1 {
+  color: white;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, .25);
+  opacity: 0;
+  animation: fadeUp 1.1s .2s forwards;
+}
+.hero-sub {
+  color: rgba(255, 255, 255, .8);
+  font-size: clamp(.95rem, 2vw, 1.2rem); font-weight: 300;
+  margin: 18px 0 44px; max-width: 560px; line-height: 1.7;
+  opacity: 0;
+  animation: fadeUp 1.1s .45s forwards;
+}
+.hero-btns {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 1.1s .65s forwards;
+}
+
+/* Кнопки на главном экране */
+.btn-gold {
+  padding: 16px 44px; border-radius: 50px;
+  background: var(--c-accent); color: white;
+  font-weight: 600; font-size: .88rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: var(--t);
+  box-shadow: 0 6px 24px rgba(198, 139, 42, .4);
+}
+.btn-gold:hover { background: var(--c-accent-l); transform: translateY(-3px); box-shadow: 0 10px 32px rgba(198, 139, 42, .5); }
+.btn-ghost {
+  padding: 16px 44px; border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, .55); color: white;
+  font-weight: 500; font-size: .88rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: var(--t);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, .12); border-color: white; }
+
+/* Индикатор прокрутки */
+.scroll-hint {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: rgba(255, 255, 255, .6); font-size: .72rem;
+  letter-spacing: .14em; text-transform: uppercase;
+  opacity: 0;
+  animation: fadeIn 1s 1.4s forwards;
+}
+.scroll-line { width: 1px; height: 48px; background: rgba(255, 255, 255, .3); position: relative; overflow: hidden; }
+.scroll-line::after {
+  content: '';
+  position: absolute; top: -100%; left: 0; right: 0;
+  height: 100%; background: rgba(255, 255, 255, .8);
+  animation: scrollDn 2.2s ease infinite;
+}
+
+
+/* ----------------------------------------------------------------
+   9. ОБЩИЕ СТИЛИ СЕКЦИЙ
+---------------------------------------------------------------- */
+.wrap { max-width: 1440px; margin: 0 auto; padding: 96px 48px; }
+.sec-head { text-align: center; margin-bottom: 60px; }
+.sec-head .label { justify-content: center; display: flex; }
+.sec-sub { color: var(--c-muted); font-size: 1rem; font-weight: 300; margin-top: 10px; }
+
+/* Метка над заголовком ("Наши товары", "Наша история" и т.д.) */
+.label {
+  display: block;
+  font-size: .75rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--c-accent); font-weight: 600; margin-bottom: 10px;
+}
+
+/* Заголовки */
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.15; }
+h1 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; }
+h2 { font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 400; }
+h3 { font-size: 1.3rem; font-weight: 400; }
+
+
+/* ----------------------------------------------------------------
+   10. СЕКЦИЯ ПРЕИМУЩЕСТВ
+---------------------------------------------------------------- */
+#features { background: var(--c-bg-alt); }
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+}
+.feat-card {
+  background: white; border-radius: var(--r);
+  padding: 40px 28px; text-align: center;
+  box-shadow: var(--shadow-s);
+  transition: var(--t);
+}
+.feat-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-m); }
+.feat-ico {
+  width: 68px; height: 68px; border-radius: 50%;
+  margin: 0 auto 24px;
+  background: var(--c-bg-alt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.9rem; transition: var(--t);
+}
+.feat-card:hover .feat-ico { background: var(--c-primary); transform: scale(1.1); }
+.feat-card h3 { font-size: 1.05rem; margin-bottom: 10px; }
+.feat-card p { font-size: .88rem; color: var(--c-muted); line-height: 1.65; }
+
+
+/* ----------------------------------------------------------------
+   11. КАТАЛОГ ТОВАРОВ
+---------------------------------------------------------------- */
+/* Кнопки фильтра */
+.filter-bar {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  justify-content: center; margin-bottom: 48px;
+}
+.f-btn {
+  padding: 10px 26px; border-radius: 50px;
+  border: 1px solid var(--c-border);
+  font-size: .82rem; font-weight: 500; letter-spacing: .06em;
+  color: var(--c-muted); transition: var(--t);
+}
+.f-btn:hover { border-color: var(--c-primary); color: var(--c-primary); }
+.f-btn.active { background: var(--c-primary); color: white; border-color: var(--c-primary); }
+
+/* Сетка карточек товаров */
+.prod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+  gap: 32px;
+}
+
+/* Карточка товара */
+.p-card {
+  background: white; border-radius: var(--r);
+  overflow: hidden; box-shadow: var(--shadow-s);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.p-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-m); }
+
+/* Блок с фотографией — при наведении меняется на второе фото */
+.p-img-wrap { position: relative; overflow: hidden; aspect-ratio: 4 / 4.4; }
+.p-img-main, .p-img-hover {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity .55s ease, transform .55s ease;
+}
+.p-img-hover { opacity: 0; }
+.p-card:hover .p-img-main  { opacity: 0; transform: scale(1.06); }
+.p-card:hover .p-img-hover { opacity: 1; transform: scale(1.06); }
+
+/* Бейдж (NEW, СКИДКА, Нет в наличии) */
+.p-badge {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  padding: 4px 12px; border-radius: 20px;
+  font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+}
+.badge-new  { background: var(--c-primary); color: white; }
+.badge-sale { background: #e53e3e; color: white; }
+.badge-out  { background: #999; color: white; }
+
+/* Кнопки появляются при наведении на карточку */
+.p-actions {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px 16px 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, .6) 0%, transparent 100%);
+  display: flex; gap: 8px;
+  transform: translateY(100%);
+  transition: transform .38s ease;
+}
+.p-card:hover .p-actions { transform: translateY(0); }
+
+.btn-cart {
+  flex: 1; padding: 12px 16px;
+  background: white; color: var(--c-primary);
+  border-radius: 10px; font-size: .82rem; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  transition: var(--t);
+}
+.btn-cart:hover { background: var(--c-primary); color: white; }
+.btn-cart:disabled { opacity: .5; cursor: not-allowed; }
+.btn-eye {
+  width: 44px; height: 44px; background: white; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; transition: var(--t); flex-shrink: 0;
+}
+.btn-eye:hover { background: var(--c-bg-alt); }
+
+/* Текст под фотографией */
+.p-body { padding: 20px 20px 22px; }
+.p-name { font-size: .97rem; font-weight: 500; margin-bottom: 6px; line-height: 1.38; }
+.p-desc { font-size: .8rem; color: var(--c-muted); line-height: 1.55; margin-bottom: 14px; }
+.p-price-row { display: flex; align-items: baseline; gap: 8px; }
+.p-price { font-family: var(--f-display); font-size: 1.35rem; color: var(--c-primary); font-weight: 600; }
+.p-price-old { font-size: .88rem; color: var(--c-muted); text-decoration: line-through; }
+.p-unit { font-size: .75rem; color: var(--c-muted); }
+
+
+/* ----------------------------------------------------------------
+   12. БЫСТРЫЙ ПРОСМОТР ТОВАРА (модальное окно)
+---------------------------------------------------------------- */
+#qv {
+  position: fixed; inset: 0; z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+  padding: 20px;
+}
+#qv.open { opacity: 1; pointer-events: all; }
+.qv-bg { position: absolute; inset: 0; background: rgba(0, 0, 0, .6); }
+.qv-box {
+  position: relative; z-index: 1;
+  background: white; border-radius: 20px;
+  width: min(900px, 100%); max-height: 90vh; overflow-y: auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  box-shadow: var(--shadow-l);
+}
+.qv-img { aspect-ratio: 1; object-fit: cover; border-radius: 20px 0 0 20px; }
+.qv-info { padding: 48px 44px; }
+.qv-name { font-size: 1.7rem; margin-bottom: 14px; }
+.qv-desc { color: var(--c-muted); line-height: 1.75; font-size: .95rem; margin-bottom: 28px; }
+.qv-price { font-family: var(--f-display); font-size: 2.2rem; color: var(--c-primary); margin-bottom: 32px; }
+.qv-close {
+  position: absolute; top: 18px; right: 18px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--c-bg-alt); font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--t); z-index: 2;
+}
+.qv-close:hover { background: var(--c-border); }
+.qv-specs {
+  margin-top: 28px; padding-top: 22px;
+  border-top: 1px solid var(--c-border);
+  font-size: .85rem; color: var(--c-muted); line-height: 2;
+}
+
+
+/* ----------------------------------------------------------------
+   13. СЕКЦИЯ «О НАС»
+---------------------------------------------------------------- */
+#about { background: var(--c-bg-alt); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.about-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.about-photo { border-radius: var(--r); overflow: hidden; }
+.about-photo:first-child { margin-top: 48px; }
+.about-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.about-photo:hover img { transform: scale(1.05); }
+.about-text .label { text-align: left; display: block; }
+.about-text h2 { margin-bottom: 22px; }
+.about-text p { color: var(--c-muted); line-height: 1.82; font-size: .97rem; margin-bottom: 14px; }
+.stats { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+.stat-num { font-family: var(--f-display); font-size: 3.2rem; color: var(--c-primary); font-weight: 300; line-height: 1; }
+.stat-lbl { font-size: .78rem; color: var(--c-muted); letter-spacing: .06em; margin-top: 4px; }
+
+
+/* ----------------------------------------------------------------
+   14. ГАЛЕРЕЯ (автопрокрутка)
+   Два одинаковых набора изображений — бесконечная прокрутка.
+---------------------------------------------------------------- */
+#gallery { overflow: hidden; padding: 32px 0; background: var(--c-bg); }
+.gallery-strip { display: flex; gap: 14px; animation: marquee 40s linear infinite; width: max-content; }
+#gallery:hover .gallery-strip { animation-play-state: paused; }
+.g-item { width: 270px; height: 270px; border-radius: var(--r); overflow: hidden; flex-shrink: 0; }
+.g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; display: block; }
+.g-item:hover img { transform: scale(1.1); }
+
+
+/* ----------------------------------------------------------------
+   15. ПРОМО-БАННЕР
+---------------------------------------------------------------- */
+#promo { background: var(--c-primary); padding: 96px 48px; text-align: center; }
+.promo-in { max-width: 680px; margin: 0 auto; }
+#promo .label { color: var(--c-accent); }
+#promo h2 { color: white; margin-bottom: 18px; }
+#promo p { color: rgba(255, 255, 255, .72); font-size: 1rem; line-height: 1.78; margin-bottom: 42px; }
+.btn-light {
+  padding: 16px 52px; border-radius: 50px;
+  background: white; color: var(--c-primary);
+  font-weight: 600; font-size: .88rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: var(--t);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18);
+}
+.btn-light:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0, 0, 0, .24); }
+
+
+/* ----------------------------------------------------------------
+   16. ДОСТАВКА
+---------------------------------------------------------------- */
+#delivery { background: var(--c-bg-alt); }
+
+
+/* ----------------------------------------------------------------
+   17. КОНТАКТЫ
+---------------------------------------------------------------- */
+.contacts-grid {
+  display: grid; grid-template-columns: 1fr 1.6fr;
+  gap: 64px; align-items: start;
+}
+.c-item-row {
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 22px 0; border-bottom: 1px solid var(--c-border);
+}
+.c-ico {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--c-bg-alt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; flex-shrink: 0; transition: var(--t);
+}
+.c-item-row:hover .c-ico { background: var(--c-primary); }
+.c-lbl { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--c-muted); margin-bottom: 3px; }
+.c-val { font-size: .97rem; font-weight: 500; }
+.c-val a { transition: color .3s; }
+.c-val a:hover { color: var(--c-primary); }
+
+/* Форма обратной связи */
+.cform { margin-top: 36px; }
+.cform h3 { font-size: 1.4rem; margin-bottom: 24px; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.fgrp { display: flex; flex-direction: column; gap: 7px; }
+.fgrp label { font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--c-muted); }
+.fgrp input, .fgrp textarea {
+  padding: 14px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  font-family: var(--f-body); font-size: .93rem;
+  background: white; color: var(--c-text); outline: none;
+  transition: border-color .3s;
+}
+.fgrp input:focus, .fgrp textarea:focus { border-color: var(--c-primary); }
+.fgrp textarea { resize: vertical; min-height: 118px; }
+.btn-send {
+  padding: 15px 48px; border-radius: 50px;
+  background: var(--c-primary); color: white;
+  font-size: .88rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: var(--t);
+}
+.btn-send:hover { background: var(--c-primary-l); transform: translateY(-2px); box-shadow: var(--shadow-m); }
+
+/* Карта */
+.map-box { border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow-m); height: 420px; }
+.map-box iframe { width: 100%; height: 100%; border: none; display: block; }
+
+
+/* ----------------------------------------------------------------
+   18. ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (TOAST)
+   Появляется снизу при добавлении товара в корзину.
+---------------------------------------------------------------- */
+#toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--c-text); color: white;
+  padding: 14px 30px; border-radius: 50px;
+  font-size: .88rem; z-index: 5000;
+  box-shadow: var(--shadow-l);
+  transition: transform .4s cubic-bezier(.4, 0, .2, 1);
+  pointer-events: none; white-space: nowrap;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+
+/* ----------------------------------------------------------------
+   19. ПОДВАЛ (FOOTER)
+---------------------------------------------------------------- */
+footer {
+  background: var(--c-text);
+  color: rgba(255, 255, 255, .6);
+  padding: 72px 48px 36px;
+}
+.foot-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 52px; max-width: 1440px; margin: 0 auto;
+}
+.foot-brand .logo { color: white; display: block; margin-bottom: 14px; }
+.foot-brand p { font-size: .88rem; line-height: 1.72; margin-bottom: 26px; }
+.socials { display: flex; gap: 10px; }
+.soc-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: var(--t);
+}
+.soc-btn:hover { background: var(--c-accent); border-color: var(--c-accent); color: white; }
+.foot-col h4 { color: white; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 20px; }
+.foot-col li + li { margin-top: 10px; }
+.foot-col a { font-size: .88rem; transition: color .3s; }
+.foot-col a:hover { color: white; }
+.foot-bot {
+  max-width: 1440px; margin: 52px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  display: flex; justify-content: space-between;
+  font-size: .82rem;
+}
+
+
+/* ----------------------------------------------------------------
+   20. АДАПТИВНОСТЬ (МЕДИАЗАПРОСЫ)
+   @media — правила для экранов определённой ширины.
+   Сначала делаем для широких экранов, потом корректируем.
+---------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .about-grid    { grid-template-columns: 1fr; }
+  .contacts-grid { grid-template-columns: 1fr; }
+  .foot-grid     { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  #nav           { padding: 0 20px; }
+  .nav-links     { display: none; }        /* скрываем ссылки, показываем бургер */
+  .burger        { display: flex; }
+  .hero-content  { padding: 0 24px 72px; }
+  .wrap          { padding: 72px 24px; }
+  .prod-grid     { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .qv-box        { grid-template-columns: 1fr; }
+  .qv-img        { border-radius: 20px 20px 0 0; }
+  .frow          { grid-template-columns: 1fr; }
+  .foot-grid     { grid-template-columns: 1fr; }
+  .foot-bot      { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .hero-btns               { flex-direction: column; }
+  .btn-gold, .btn-ghost    { text-align: center; }
+}

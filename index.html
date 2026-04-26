@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>СтавШнур — Шнуры для плетения гамаков и подвесных кресел</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#" class="logo">Став<em>Шнур</em></a>
+
+    <ul class="nav-links">
+      <li><a href="#catalog">Каталог</a></li>
+      <li><a href="#about">О нас</a></li>
+      <li><a href="#delivery">Доставка</a></li>
+      <li><a href="#contacts">Контакты</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="nav-icon" id="searchBtn" title="Поиск" aria-label="Поиск">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+
+      <div class="cart-wrap">
+        <button class="nav-icon" id="cartBtn" title="Корзина" aria-label="Корзина">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </button>
+        <span class="cart-dot" id="cartDot">0</span>
+      </div>
+
+      <button class="burger" id="burgerBtn" aria-label="Меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="mob-menu">
+  <a href="#catalog"  class="mob-link">Каталог</a>
+  <a href="#about"    class="mob-link">О нас</a>
+  <a href="#delivery" class="mob-link">Доставка</a>
+  <a href="#contacts" class="mob-link">Контакты</a>
+</div>
+
+<div id="search-ov" role="dialog" aria-label="Поиск">
+  <button class="srch-close-btn" id="searchClose" aria-label="Закрыть">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+  <div class="srch-box">
+    <h4>Поиск по каталогу</h4>
+    <div class="srch-row">
+      <input type="text" id="searchInput" placeholder="Шнур, кресло, ножницы…" autocomplete="off">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    <div id="srch-results"></div>
+  </div>
+</div>
+
+<div id="cart-veil"></div>
+<aside id="cart" role="dialog" aria-label="Корзина">
+  <div class="cart-hd">
+    <h3>Корзина</h3>
+    <button class="cart-x" id="cartClose" aria-label="Закрыть">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty-msg" id="cartEmpty">
+      <i class="fa-solid fa-cart-shopping" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+      <p>Ваша корзина пуста</p>
+    </div>
+  </div>
+
+  <div class="cart-ft">
+    <div class="cart-total-row">
+      <span>Итого:</span>
+      <strong id="cartTotal">0 ₽</strong>
+    </div>
+    <button class="btn-order" onclick="handleOrder()">Оформить заказ</button>
+  </div>
+</aside>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grad"></div>
+
+  <div class="hero-content">
+    <h1>СтавШнур:<br>все для вашего<br><em style="color:var(--c-accent);font-style:normal">творчества</em></h1>
+    <p class="hero-sub">
+      Производство и продажа прочного полиэфирного шнура для гамаков,<br>
+      дизайнерской мебели и аксессуаров макраме
+    </p>
+    <div class="hero-btns">
+      <a href="#catalog" class="btn-gold">Смотреть каталог</a>
+      <a href="#about"   class="btn-ghost">Узнать о нас</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Листать</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="feat-grid">
+      <div class="feat-card anim">
+        <div class="feat-ico"><i class="fa-solid fa-scissors"></i></div>
+        <h3>Прочность 100 кг</h3>
+        <p>Наш шнур разработан специально для изделий, требующих высокой нагрузки и износостойкости</p>
+      </div>
+      <div class="feat-card anim anim-d1">
+        <div class="feat-ico"><i class="fa-solid fa-palette"></i></div>
+        <h3>Палитра оттенков</h3>
+        <p>Более 20 актуальных цветов, которые сохраняют яркость даже под прямыми солнечными лучами</p>
+      </div>
+      <div class="feat-card anim anim-d2">
+        <div class="feat-ico"><i class="fa-solid fa-truck"></i></div>
+        <h3>Быстрая доставка</h3>
+        <p>Отправляем товары по всей России проверенными транспортными компаниями в день заказа</p>
+      </div>
+      <div class="feat-card anim anim-d3">
+        <div class="feat-ico"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>Свой склад</h3>
+        <p>Весь ассортимент в наличии на складе в Ставрополе, что гарантирует минимальные сроки ожидания</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="catalog">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label anim">Наш ассортимент</span>
+      <h2 class="anim">Каталог продукции</h2>
+      <p class="sec-sub anim">Профессиональные материалы для мастеров и любителей макраме</p>
+    </div>
+    <div class="filter-bar anim">
+      <button class="f-btn active" data-filter="all">Все товары</button>
+      <button class="f-btn" data-filter="cord">Шнуры</button>
+      <button class="f-btn" data-filter="accessories">Аксессуары</button>
+      <button class="f-btn" data-filter="tools">Инструменты</button>
+    </div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-photos anim">
+        <div class="about-photo" style="aspect-ratio: 3/4">
+          <img src="image/6N4A9038.jpg" alt="Производство шнуров" loading="lazy">
+        </div>
+        <div class="about-photo" style="aspect-ratio: 3/4">
+          <img src="image/6N4A9039.jpg" alt="Склад СтавШнур" loading="lazy">
+        </div>
+      </div>
+      <div class="about-text anim anim-d2">
+        <span class="label">О проекте</span>
+        <h2>СтавШнур — ваш надежный партнер</h2>
+        <p>Мы прошли путь от небольшой мастерской до специализированного магазина материалов для плетения. Главная цель — дать мастерам шнур, который не растягивается и не линяет.</p>
+        <p>Наш шнур диаметром 5 мм имеет статический сердечник, что критически важно для геометрии подвесных кресел и гамаков.</p>
+        <div class="stats">
+          <div>
+            <div class="stat-num">20+</div>
+            <div class="stat-lbl">вариантов цвета</div>
+          </div>
+          <div>
+            <div class="stat-num">5 мм</div>
+            <div class="stat-lbl">толщина шнура</div>
+          </div>
+          <div>
+            <div class="stat-num">100%</div>
+            <div class="stat-lbl">качество волокна</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacts">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label anim">На связи</span>
+      <h2 class="anim">Контакты</h2>
+      <p class="sec-sub anim">Ставрополь, ул. Дзержинского, 163</p>
+    </div>
+
+    <div class="contacts-grid">
+      <div class="anim">
+        <div class="c-item-row">
+          <div class="c-ico"><i class="fa-solid fa-phone"></i></div>
+          <div>
+            <div class="c-lbl">Телефон</div>
+            <div class="c-val"><a href="tel:+78000000000">+7 (800) 000-00-00</a></div>
+          </div>
+        </div>
+
+        <div class="c-item-row">
+          <div class="c-ico"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <div class="c-lbl">Email</div>
+            <div class="c-val"><a href="mailto:info@stavshnur.ru">info@stavshnur.ru</a></div>
+          </div>
+        </div>
+
+        <div class="c-item-row">
+          <div class="c-ico"><i class="fa-brands fa-instagram"></i></div>
+          <div>
+            <div class="c-lbl">Instagram</div>
+            <div class="c-val"><a href="#">@stav_shnur</a></div>
+          </div>
+        </div>
+
+        <div class="c-item-row">
+          <div class="c-ico"><i class="fa-regular fa-clock"></i></div>
+          <div>
+            <div class="c-lbl">Режим работы</div>
+            <div class="c-val">Пн–Пт: 10:00 – 19:00</div>
+          </div>
+        </div>
+
+        <div class="cform">
+          <h3>Напишите нам</h3>
+          <div class="frow">
+            <div class="fgrp">
+              <label>Ваше имя</label>
+              <input type="text" placeholder="Имя">
+            </div>
+            <div class="fgrp">
+              <label>Контакт</label>
+              <input type="text" placeholder="Телефон или почта">
+            </div>
+          </div>
+          <div class="fgrp" style="margin-bottom: 22px">
+            <label>Ваш вопрос</label>
+            <textarea placeholder="Введите текст сообщения…"></textarea>
+          </div>
+          <button class="btn-send" onclick="submitForm(this)">Отправить</button>
+        </div>
+      </div>
+
+      <div class="anim anim-d2">
+        <div class="map-box">
+          <div class="anim anim-d2">
+  <div class="map-box">
+    <div class="anim anim-d2">
+  <div class="map-box">
+    <iframe 
+      src="https://www.openstreetmap.org/export/embed.html?bbox=41.9560%2C45.0410%2C41.9630%2C45.0460&amp;layer=mapnik&amp;marker=45.0436%2C41.9595" 
+      allowfullscreen 
+      loading="lazy" 
+      title="Карта СтавШнур — ул. Дзержинского, 163">
+    </iframe>
+  </div>
+</div>
+  </div>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <span class="logo">Став<em>Шнур</em></span>
+      <p>Магазин материалов для макраме и ручного творчества. Собственное производство в Ставрополе.</p>
+      <div class="socials">
+        <a href="#" class="soc-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="soc-btn" title="ВКонтакте"><i class="fa-brands fa-vk"></i></a>
+        <a href="#" class="soc-btn" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="soc-btn" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+      </div>
+    </div>
+
+    <div class="foot-col">
+      <h4>Навигация</h4>
+      <ul>
+        <li><a href="#catalog">Каталог</a></li>
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#delivery">Доставка</a></li>
+        <li><a href="#contacts">Контакты</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h4>Контакты</h4>
+      <ul>
+        <li><a href="tel:+78000000000">+7 (800) 000-00-00</a></li>
+        <li>г. Ставрополь, ул. Дзержинского, 163</li>
+        <li>Пн–Пт: 10:00 – 19:00</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <span>© 2025 СтавШнур. Все права защищены.</span>
+    <span>Политика обработки данных</span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<div id="qv" role="dialog" aria-modal="true">
+  <div class="qv-bg" id="qvBg"></div>
+  <div class="qv-box" id="qvBox"></div>
+</div>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>
