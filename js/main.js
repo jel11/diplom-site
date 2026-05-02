@@ -1,5 +1,5 @@
 /* ================================================================
-   main.js — логика сайта МакраМир
+   main.js — логика сайта СтавШнур
    Структура файла:
    1. Данные товаров (PRODUCTS)
    2. Корзина (добавление, удаление, отображение, localStorage)
@@ -28,7 +28,7 @@ const PRODUCTS = [
     price: 5.5,
     unit: 'руб/м',
     img: 'image/6N4A8869.jpg',
-    img2: 'image/6N4A8948.jpg',
+    img2: 'image/6N4A8869.jpg',
     desc: 'Полиэфирный шнур со статическим сердечником. Диаметр 5 мм. Идеален для плетения гамаков и подвесных кресел.',
     badge: null,
     stock: true
@@ -39,8 +39,8 @@ const PRODUCTS = [
     cat: 'cord',
     price: 5.5,
     unit: 'руб/м',
-    img: 'image/6N4A8948.jpg',
-    img2: 'image/6N4A8949.jpg',
+    img: 'image/photo_2025-08-17_19-37-20 (2).jpg',
+    img2: 'image/photo_2025-08-17_19-37-20 (2).jpg',
     desc: 'Насыщенный шоколадный оттенок. Полиэфирный шнур со статическим сердечником 5 мм.',
     badge: null,
     stock: true
@@ -51,8 +51,8 @@ const PRODUCTS = [
     cat: 'cord',
     price: 5.5,
     unit: 'руб/м',
-    img: 'image/6N4A8949.jpg',
-    img2: 'image/6N4A8952.jpg',
+    img: 'image/photo_2025-08-11_20-30-05.jpg',
+    img2: 'image/photo_2025-08-11_20-30-05.jpg',
     desc: 'Яркий золотистый оттенок. Полиэфирный шнур со статическим сердечником 5 мм.',
     badge: 'sale',
     stock: true
@@ -63,108 +63,72 @@ const PRODUCTS = [
     cat: 'cord',
     price: 5.5,
     unit: 'руб/м',
-    img: 'image/6N4A8952.jpg',
-    img2: 'image/6N4A9030.jpg',
+    img: 'image/photo_2025-08-17_19-37-06 (2).jpg',
+    img2: 'image/photo_2025-08-17_19-37-06 (2).jpg',
     desc: 'Классический белый. Подходит для светлых интерьеров и скандинавского стиля.',
     badge: 'new',
     stock: true
   },
   {
     id: 5,
-    name: 'Шнур полиэфирный без сердечника, 5 мм',
-    cat: 'cord',
-    price: 4.0,
-    unit: 'руб/м',
-    img: 'image/6N4A9032.jpg',
-    img2: 'image/6N4A9030.jpg',
-    desc: 'Мягкий и гибкий шнур без сердечника. Подходит для декоративных изделий и макраме.',
-    badge: null,
-    stock: true
-  },
-  {
-    id: 6,
-    name: 'Шнур гамаковый Чёрный, 5 мм',
-    cat: 'cord',
-    price: 5.5,
-    unit: 'руб/м',
-    img: 'image/6N4A9030.jpg',
-    img2: 'image/6N4A9032.jpg',
-    desc: 'Строгий чёрный для лаконичных современных изделий. Полиэфирный шнур 5 мм.',
-    badge: null,
-    stock: false    // нет в наличии
-  },
-  {
-    id: 7,
     name: 'Шнур гамаковый Терракота, 5 мм',
     cat: 'cord',
     price: 5.5,
     unit: 'руб/м',
-    img: 'image/6N4A9043.jpg',
-    img2: 'image/6N4A9061.jpg',
+    img: 'image/photo_2025-08-17_19-36-43.jpg',
+    img2: 'image/photo_2025-08-17_19-36-43.jpg',
     desc: 'Насыщенный терракотовый цвет. Создаёт тёплую атмосферу в любом интерьере.',
     badge: 'new',
     stock: true
   },
   {
+    id: 6,
+    name: 'Шнур полиэфирный без сердечника Серый, 5 мм',
+    cat: 'cord',
+    price: 4.0,
+    unit: 'руб/м',
+    img: 'image/photo_2025-08-05_16-35-44.jpg',
+    img2: 'image/photo_2025-08-05_16-35-44.jpg',
+    desc: 'Мягкий серый шнур без сердечника. Подходит для декоративных изделий и макраме.',
+    badge: null,
+    stock: true
+  },
+  {
+    id: 7,
+    name: 'Шнур полиэфирный без сердечника Небесно-голубой, 5 мм',
+    cat: 'cord',
+    price: 4.0,
+    unit: 'руб/м',
+    img: 'image/photo_2025-08-11_20-30-09.jpg',
+    img2: 'image/photo_2025-08-11_20-30-18.jpg',
+    desc: 'Нежный небесно-голубой шнур без сердечника. Отлично подходит для ярких изделий макраме.',
+    badge: null,
+    stock: true
+  },
+  {
     id: 8,
-    name: 'Деревянная основа для качелей Бохо, 40×22 см',
-    cat: 'accessories',
-    price: 900,
-    unit: 'руб',
-    img: 'image/6N4A9038.jpg',
-    img2: 'image/6N4A9039.jpg',
-    desc: 'Деревянная основа из лиственницы в стиле Бохо для детских качелей. Размер 40×22 см.',
-    badge: 'new',
+    name: 'Шнур полиэфирный без сердечника Бордовый, 5 мм',
+    cat: 'cord',
+    price: 4.0,
+    unit: 'руб/м',
+    img: 'image/photo_2025-08-17_19-36-49.jpg',
+    img2: 'image/photo_2025-08-17_19-36-49.jpg',
+    desc: 'Глубокий бордовый шнур без сердечника. Для стильных изделий.',
+    badge: null,
     stock: true
   },
   {
     id: 9,
-    name: 'Набор колец для подвесных кресел',
-    cat: 'accessories',
-    price: 350,
-    unit: 'руб/набор',
-    img: 'image/6N4A9039.jpg',
-    img2: 'image/6N4A9041.jpg',
-    desc: 'Металлические кольца для плетения подвесных кресел. Диаметр 70/90 мм, толщина 1.5 мм.',
-    badge: null,
-    stock: true
-  },
-  {
-    id: 10,
     name: 'Ножницы профессиональные 19 см',
     cat: 'tools',
     price: 500,
     unit: 'руб',
-    img: 'image/6N4A9041.jpg',
-    img2: 'image/6N4A9043.jpg',
+    img: 'image/6N4A8948.jpg',
+    img2: 'image/6N4A8949.jpg',
     desc: 'Суперострые ножницы для резки шнуров, кожи и плотных тканей. Длина лезвия 19 см.',
     badge: 'sale',
     stock: true,
-    priceOld: 750   // старая цена — показывается зачёркнутой
-  },
-  {
-    id: 11,
-    name: 'Ножницы малые 14 см',
-    cat: 'tools',
-    price: 280,
-    unit: 'руб',
-    img: 'image/6N4A9061.jpg',
-    img2: 'image/6N4A8869.jpg',
-    desc: 'Компактные острые ножницы для точной работы со шнуром. Длина 14 см.',
-    badge: null,
-    stock: true
-  },
-  {
-    id: 12,
-    name: 'Деревянная жердь для гамака',
-    cat: 'accessories',
-    price: 600,
-    unit: 'руб',
-    img: 'image/photo_2025-08-17_19-36-43.jpg',
-    img2: 'image/photo_2025-08-17_19-37-26.jpg',
-    desc: 'Деревянная жердь из натурального дерева. Идеальна для крепления гамаков и декоративных изделий.',
-    badge: null,
-    stock: true
+    priceOld: 750
   },
 ];
 
@@ -491,9 +455,10 @@ function renderProducts(filter) {
       ? '<span class="p-price-old">' + p.priceOld + ' ₽</span>'
       : '';
 
+    const noHoverClass = (p.img === p.img2) ? 'no-hover' : '';
     return (
       '<div class="p-card anim" data-id="' + p.id + '">' +
-        '<div class="p-img-wrap">' +
+        '<div class="p-img-wrap ' + noHoverClass + '">' +
           badgeHtml +
           '<img class="p-img-main"  src="' + p.img  + '" alt="' + p.name + '" loading="lazy">' +
           '<img class="p-img-hover" src="' + p.img2 + '" alt="' + p.name + '" loading="lazy">' +

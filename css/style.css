@@ -1,5 +1,5 @@
 /* ================================================================
-   style.css — стили сайта МакраМир
+   style.css — стили сайта СтавШнур
    Структура файла:
    1. CSS-переменные (цвета, тени, шрифты)
    2. Сброс стилей
@@ -582,6 +582,10 @@ h3 { font-size: 1.3rem; font-weight: 400; }
 .p-card:hover .p-img-main  { opacity: 0; transform: scale(1.06); }
 .p-card:hover .p-img-hover { opacity: 1; transform: scale(1.06); }
 
+/* Если hover-картинка отсутствует (img === img2) — отключаем эффект */
+.p-img-wrap.no-hover .p-img-main { opacity: 1 !important; transform: none !important; }
+.p-img-wrap.no-hover .p-img-hover { display: none; }
+
 /* Бейдж (NEW, СКИДКА, Нет в наличии) */
 .p-badge {
   position: absolute; top: 14px; left: 14px; z-index: 2;
@@ -723,6 +727,92 @@ h3 { font-size: 1.3rem; font-weight: 400; }
    16. ДОСТАВКА
 ---------------------------------------------------------------- */
 #delivery { background: var(--c-bg-alt); }
+
+.del-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  margin-bottom: 64px;
+}
+.del-step {
+  position: relative;
+  text-align: center;
+  padding: 36px 24px;
+  background: white;
+  border-radius: var(--r);
+  box-shadow: var(--shadow-s);
+  transition: var(--t);
+  overflow: hidden;
+}
+.del-step:hover { transform: translateY(-8px); box-shadow: var(--shadow-m); }
+.del-num {
+  position: absolute;
+  top: 8px; right: 14px;
+  font-family: var(--f-display);
+  font-size: 3.2rem;
+  font-weight: 300;
+  color: var(--c-border);
+  line-height: 1;
+  pointer-events: none;
+}
+.del-ico {
+  width: 64px; height: 64px; border-radius: 50%;
+  margin: 0 auto 20px;
+  background: var(--c-bg-alt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; color: var(--c-primary);
+  transition: var(--t);
+}
+.del-step:hover .del-ico { background: var(--c-primary); color: white; transform: scale(1.08); }
+.del-step h3 { font-size: 1.05rem; margin-bottom: 10px; }
+.del-step p { font-size: .86rem; color: var(--c-muted); line-height: 1.6; }
+
+.del-methods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.del-card {
+  background: white;
+  border-radius: var(--r);
+  padding: 38px 30px;
+  box-shadow: var(--shadow-s);
+  transition: var(--t);
+  display: flex;
+  flex-direction: column;
+}
+.del-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-m); }
+.del-card-ico {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: var(--c-bg-alt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; color: var(--c-accent);
+  margin-bottom: 22px;
+  transition: var(--t);
+}
+.del-card:hover .del-card-ico { background: var(--c-accent); color: white; }
+.del-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+.del-card p { font-size: .88rem; color: var(--c-muted); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+.del-meta {
+  display: flex; gap: 16px;
+  flex-wrap: wrap;
+  font-size: .82rem; font-weight: 500;
+}
+.del-meta span {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--c-muted);
+}
+.del-meta i { font-size: .78rem; color: var(--c-accent); }
+.del-free { color: var(--c-primary) !important; font-weight: 600; }
+
+@media (max-width: 1100px) {
+  .del-steps   { grid-template-columns: repeat(2, 1fr); }
+  .del-methods { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .del-steps   { grid-template-columns: 1fr; }
+  .del-methods { grid-template-columns: 1fr; }
+}
 
 
 /* ----------------------------------------------------------------
